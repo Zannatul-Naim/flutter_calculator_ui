@@ -1,3 +1,5 @@
 # assignment_1_calculator_ui
 
-A new Flutter project.
+# Calculator UI
+
+![calculator pic](./pic/calculator.png)
