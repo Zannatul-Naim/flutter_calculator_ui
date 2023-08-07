@@ -1,53 +1,110 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(CalculatorApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CalculatorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CalculatorScreen(),
+    );
+  }
+}
+
+class CalculatorScreen extends StatefulWidget {
+  @override
+  // ignore: library_private_types_in_public_api
+  _CalculatorScreenState createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  String _displayText = '';
+
+  void _onButtonPressed(String buttonText) {
+    setState(() {
+      if (buttonText == '=') {
+        // Perform calculation logic here
+      } else if (buttonText == 'C') {
+        _displayText = '';
+      } else {
+        _displayText += buttonText;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Calculator'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomRight,
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                _displayText,
+                style: TextStyle(fontSize: 36.0),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              CalculatorButton(text: '7', onPressed: _onButtonPressed),
+              CalculatorButton(text: '8', onPressed: _onButtonPressed),
+              CalculatorButton(text: '9', onPressed: _onButtonPressed),
+              CalculatorButton(text: 'x', onPressed: _onButtonPressed),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(text: '4', onPressed: _onButtonPressed),
+              CalculatorButton(text: '5', onPressed: _onButtonPressed),
+              CalculatorButton(text: '6', onPressed: _onButtonPressed),
+              CalculatorButton(text: '-', onPressed: _onButtonPressed),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(text: '1', onPressed: _onButtonPressed),
+              CalculatorButton(text: '2', onPressed: _onButtonPressed),
+              CalculatorButton(text: '3', onPressed: _onButtonPressed),
+              CalculatorButton(text: '+', onPressed: _onButtonPressed),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(text: 'C', onPressed: _onButtonPressed),
+              CalculatorButton(text: '0', onPressed: _onButtonPressed),
+              CalculatorButton(text: '=', onPressed: _onButtonPressed),
+              CalculatorButton(text: '/', onPressed: _onButtonPressed),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-}
+class CalculatorButton extends StatelessWidget {
+  final String text;
+  final Function(String) onPressed;
 
-class MyHomePage extends StatelessWidget {
+  CalculatorButton({required this.text, required this.onPressed});
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return Scaffold(
-      body: Column(
-        children: [
-          Text('A random AWESOME idea:'),
-          Text(appState.current.asLowerCase),
-
-          // ↓ Add this.
-          ElevatedButton(
-            onPressed: () {
-              print('button pressed!');
-            },
-            child: Text('Next'),
-          ),
-        ],
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24.0),
+        ),
       ),
     );
   }
