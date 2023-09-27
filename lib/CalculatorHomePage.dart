@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class CalculatorHomePage extends StatefulWidget {
@@ -15,42 +17,49 @@ class CalculatorHomePage extends StatefulWidget {
 class _CalculatorHomePageState extends State<CalculatorHomePage> {
   String output = "";
   String _output = "";
+  String expression = "";
   double op1 = 0.0;
   double op2 = 0.0;
   String operand = "";
 
   buttonPressed(String buttonText) {
     if(buttonText == "CLEAR") {
-      _output = "";
+      _output = "0";
       op1 = op2 = 0.0;
       operand = "";
+      expression = "";
     } else if(buttonText == '/' || buttonText == 'x' || buttonText == '+' || buttonText == '-') {
-      op1 = double.parse(output);
+      op1 = double.parse(_output);
       operand = buttonText;
+      expression = "$expression $buttonText ";
       _output = "";
-    } else if(buttonText == '.') {
+    } else if(buttonText == ".") {
       if(_output.contains(".")) {
         return "Error! duplicate dot found!";
       } else {
         _output = _output + buttonText;
+        expression += buttonText;
       }
     } else if(buttonText == '=') {
-      if(buttonText == '+') {
+      op2 = double.parse(_output);
+      if(operand == '+') {
         _output = (op1+op2).toString();
-      } else if(buttonText == '-') {
+      } else if(operand == '-') {
         _output = (op1-op2).toString();
-      } else if(buttonText == 'x') {
+      } else if(operand == 'x') {
         _output = (op1*op2).toString();
-      } else if(buttonText == '/') {
+      } else if(operand == '/') {
         _output = (op1/op2).toString();
       }
       op1 = op2 = 0.0;
       operand = '';
     } else {
+      expression += buttonText;
       _output += buttonText;
     }
     setState(() {
-      output = double.parse(_output).toStringAsFixed(2);
+      output = double.parse(_output).toStringAsFixed(0);
+      expression;
     });
   }
 
@@ -81,12 +90,26 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.symmetric(
               vertical: 24.0,
-              horizontal: 12.0
+              horizontal: 6.0
             ),
             child: Text(
               output,
               style: const TextStyle(
-                fontSize: 48.0,
+                fontSize: 36.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container (
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(
+              vertical: 24.0,
+              horizontal: 6.0
+            ),
+            child: Text (
+              expression,
+              style: const TextStyle(
+                fontSize: 36.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
